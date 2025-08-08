@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>getUserMedia Examples - addpipe.com</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Try getUserMedia to record or upload audio/video using your device’s camera or microphone.">
+    <link rel="canonical" href="https://addpipe.com/getusermedia-examples/"/>
+    <link rel="stylesheet" href="css/atom-one-dark.min.css">
+    <script src="js/highlight.min.js"></script>
+  
+    <!-- Plausible Analytics -->
+    <script defer data-domain="addpipe.com" src="https://plausible.io/js/script.js"></script>
+  
+    <style>
+        body {
+            line-height: 1.5;
+            font-family: sans-serif;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            color:black;
+            margin:2em;
+        }
+
+        h1 {
+            text-decoration: underline red;
+            text-decoration-thickness: 3px;
+            text-underline-offset: 6px;
+            font-size: 220%;
+            font-weight: bold;
+        }
+
+        h2 {
+            font-weight: bold;
+            color: #005A9C;
+            font-size: 140%;
+            text-transform: uppercase;
+        }
+
+        p {
+            margin: 1em 0;
+        }
+
+        pre {
+            padding: 0px;
+            border:0px;
+            border-radius: 0px;
+        }
+
+        red {
+            color: red;
+        }
+
+        .example-section {
+            padding: 25px 0;
+        }
+
+        button {
+            flex-grow: 1;
+            height: 3rem;
+            min-width: 10rem;
+            border: none;
+            border-radius: 0.15rem;
+            background: #ed341d;
+            margin-left: 2px;
+            box-shadow: inset 0 -0.15rem 0 rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        button:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        video, canvas {
+            max-width: 100%;
+            border-radius: 5px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            margin: 10px 0;
+            background: #000;
+        }
+
+        .controls {
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        select, input {
+            padding: 8px 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            margin: 5px;
+            font-size: 14px;
+        }
+
+        .error {
+            color: #e53e3e;
+            background: #fed7d7;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #e53e3e;
+        }
+
+        .info {
+            color: black;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid black;
+        }
+
+        .status {
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        .status.recording {
+            background: #fed7d7;
+            color: #c53030;
+            animation: pulse 2s infinite;
+        }
+
+        .status.stopped {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>getUserMedia Examples </h1>
+    <p class="description">Made by the <a href="https://addpipe.com" target="_blank">Pipe Video Recording Platform</a></p>
+    
+    <p class="description">
+        These examples demonstrate the powerful <a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia" target="_blank"><code>getUserMedia</code> method</a>, which gives web applications secure access to device cameras and microphones. To successfully run the <code>getUserMedia</code>, your web page needs to be in a <a href="https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts" target="_blank">secure context</a> and you need to have user permissions at the browser and operating system levels. When first accessed, the browser will prompt for permissions, and you can manage these settings through browser preferences or OS privacy controls.
+        <br />
+        <br />
+        Originally part of WebRTC, <code>getUserMedia</code> has become essential for media capture tasks such as video recording, audio recording, taking pictures, and enumerating available devices. These examples showcase how <code>getUserMedia</code> enables a range of key scenarios, making it a vital tool for modern web applications.
+    </p>
+    
+    <h2>table of contents </h2>
+    <a href="#videoAndAudio">Example 1: Video and Audio</a><br />
+    <a href="#stoppingTheStream">Example 2: Stopping the Stream</a><br />
+    <a href="#audioOnlyConstraint">Example 3: Audio Only Constraint</a><br />
+    <a href="#videoOnlyConstraint">Example 4: Video Only Constraint</a><br />
+    <a href="#listingSpecificDevice">Example 5: Listing Specific Devices</a><br />
+    <a href="#recordingClip">Example 6: Recording a Clip (MediaRecorder)</a><br />
+    <a href="#torchControl">Example 7: Camera with Torch Control</a><br />
+    <a href="#requestAnAspectRatio">Example 8: Requesting a Certain Aspect Ratio</a><br />
+    <a href="#requestPortraitVideoStream">Example 9: Requesting a Portrait Video Stream With facingMode:user</a><br />
+    <a href="#basicVideoPreview">Example 10: Basic Video Preview (Promise-based)</a><br />
+    <a href="#asyncPlusAudioOnly">Example 11: Async/Await + Audio Only</a><br />
+    <a href="#captureVideo">Example 12: Capture Video + Take a Snapshot</a><br />
+    <br />
+    <br />
+
+<h4 id="videoAndAudio">🎥🎤 Example 1: Video and Audio</h4>
+<p>This example demonstrates the basic use of the <code>getUserMedia</code> method to access both the user's camera and microphone simultaneously. The code requests permission for both video and audio streams using <code>{ video: true, audio: true }</code>, then creates a video element that displays the live camera feed with audio in real-time. </p>
+<pre><code class="example">&lt;video id="video" autoplay playsinline&gt; &lt;/video&gt;
+&lt;script&gt;
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+    .then(stream => {
+        const video = document.createElement('video');
+        video.autoplay = true;
+        video.srcObject = stream;
+        document.body.appendChild(video);
+    })
+    .catch(error => {
+        console.error('Error accessing camera and microphone:', error);
+    });
+&lt;/script&gt;</code></pre>
+<p>Key points:</p>
+<ul>
+    <li>Uses <code>{ video: true, audio: true }</code> to request both camera and microphone access;</li>
+    <li>Creates a video element with autoplay to display the live stream immediately;</li>
+    <li>Includes basic error handling with <code>.catch()</code> for permission denials or device issues.</li>
+</ul>
+<br />
+<br />
+<h4 id="stoppingTheStream">🛑 Example 2: Stopping the Stream</h4>
+<p>Demonstrates how to properly stop media streams by calling <code>getTracks().forEach(track => track.stop())</code> on the stream object. This is essential for releasing camera and microphone resources when they're no longer needed.</p>
+<pre><code class="example">&lt;script&gt;
+    stream.getTracks().forEach(track => track.stop());
+&lt;/script&gt;
+</code></pre>
+<p>Key points:</p>
+<ul>
+    <li>Essential for preventing memory leaks and freeing up camera/microphone for other applications;</li>
+    <li>Should always be called when media access is no longer needed.</li>
+</ul>
+<br />
+<br />
+<h4 id="audioOnlyConstraint">🎤 Example 3: Audio Only Constraint</h4>
+<p>Shows how to request access to only the microphone using <code>{ audio: true }</code> without requesting video. </p>
+<pre><code class="example">&lt;script&gt;
+    navigator.mediaDevices.getUserMedia({ audio: true })
+    .then(stream => {
+        console.log('Microphone access granted');
+    })
+    .catch(error => {
+        console.error('Error accessing microphone:', error);
+    });
+&lt;/script&gt;
+</code></pre>
+<p>Key points:</p>
+<ul>
+    <li>Logs success message to console when microphone permission is granted;</li>
+    <li>Useful for voice recording or audio chat applications.</li>
+</ul>
+<br />
+<br />
+<h4 id="videoOnlyConstraint">📸 Example 4: Video Only Constraint</h4>
+<p>Demonstrates requesting access to only the camera using <code>{ video: true }</code> without audio. </p>
+<pre><code class="example">&lt;script&gt;
+    navigator.mediaDevices.getUserMedia({ video: true })
+    .then(stream => {
+      const video = document.getElementById('video');
+      video.srcObject = stream;
+    })
+    .catch(error => {
+      console.error('Error accessing camera:', error);
+    });
+&lt;/script&gt;
+</code></pre>
+<p>Key points:</p>
+<ul>
+    <li>Suitable for applications that need visual capture without sound.</li>
+</ul>
+<br />
+<br />
+<h4 id="listingSpecificDevice">🔍 Example 5: Listing Specific Devices</h4>
+<p>Uses <code>navigator.mediaDevices.enumerateDevices()</code> to list all available media input devices (cameras and microphones) on the user's system.</p>
+<pre><code class="example">&lt;script&gt;
+    navigator.mediaDevices.enumerateDevices().then(devices => {
+        devices.forEach(device => {
+            console.log(device.kind + ": " + device.label + " id = " + device.deviceId);
+        });
+    });
+&lt;/script&gt;
+</code></pre>
+<p>Key points:</p>
+<ul>
+    <li>Logs device kind, label, and deviceId for each camera and microphone;</li>
+    <li>Helpful for giving users device selection options in media applications.</li>
+</ul>
+<br />
+<br />
+<h4 id="recordingClip">📸 Example 6: Recording a Clip (MediaRecorder)</h4>
+<p>Shows how to record video and audio using the <code>MediaRecorder API</code>.</p>
+<pre><code class="example">&lt;video id="preview" autoplay playsinline width="320" height="240"&gt;&lt;/video&gt;
+    &lt;button id="record">Start Recording&lt;/button&gt;
+    &lt;button id="stop" disabled>Stop & Download&lt;/button&gt;
+    
+    &lt;script&gt;
+        const videoEl = document.getElementById('preview'),
+        recordBtn = document.getElementById('record'),
+        stopBtn   = document.getElementById('stop');
+    
+        let recorder, recordedChunks = [];
+    
+        // 1. Get both video and audio
+        navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        .then(stream => {
+        videoEl.srcObject = stream;
+    
+        // 2. Setup MediaRecorder
+        recorder = new MediaRecorder(stream);
+        recorder.ondataavailable = e => {
+            if (e.data && e.data.size > 0) {
+            recordedChunks.push(e.data);
+            }
+        };
+    
+        recorder.onstop = () => {
+            // Create a Blob from recorded chunks
+            const blob = new Blob(recordedChunks, { type: 'video/webm' });
+            const url  = URL.createObjectURL(blob);
+    
+            // Create download link
+            const a = document.createElement('a');
+            a.style.display = 'block';
+            a.href = url;
+            a.download = 'capture.webm';
+            a.textContent = 'Download recording';
+            document.body.appendChild(a);
+            };
+        })
+        .catch(console.error);
+    
+        // 3. Wire up buttons
+        recordBtn.addEventListener('click', () => {
+            recordedChunks = [];
+            recorder.start();
+            recordBtn.disabled = true;
+            stopBtn.disabled   = false;
+        });
+    
+        stopBtn.addEventListener('click', () => {
+            recorder.stop();
+            recordBtn.disabled = false;
+            stopBtn.disabled   = true;
+        });
+    &lt;/script&gt;
+</code></pre>
+<p>Key points:</p>
+<ul>
+    <li>Grabs audio + video;</li>
+    <li>Pipes it to a &lt;video&gt; for live preview;</li>
+    <li>Uses <code>MediaRecorder</code> to capture chunks;</li>
+    <li>When stopped, bundles into a <code>.webm</code> and offers a download link.</li>
+</ul>
+<br />
+<br />
+<h4 id="torchControl">📷 Example 7: Camera with Torch Control</h4>
+<p>Demonstrates accessing the back camera with <code>facingMode: 'environment'</code> and controlling the device's flashlight/torch feature.</p>
+<pre><code class="example">&lt;div class="controls"&gt;
+    &lt;button id="startBtn">Start Camera&lt;/button&gt;
+    &lt;button id="stopBtn" disabled>Stop Camera&lt;/button&gt;
+    &lt;button id="torchBtn" class="torch-btn" disabled>🔦 Toggle Torch&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;video id="video" autoplay playsinline muted>&lt;/video&gt;
+
+&lt;div id="status" class="status info"&gt;
+    Ready to start camera. Make sure you're using Chrome on Android for torch functionality.
+&lt;/div&gt;
+
+&lt;script&gt;
+    let stream = null;
+    let track = null;
+    let torchOn = false;
+
+    const video = document.getElementById('video');
+    const startBtn = document.getElementById('startBtn');
+    const torchBtn = document.getElementById('torchBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const status = document.getElementById('status');
+
+    function updateStatus(message, type = '') {
+        status.textContent = message;
+        status.className = type;
+    }
+
+    async function startCamera() {
+        try {
+            updateStatus('Starting camera...');
+            
+            // Request camera with back camera
+            stream = await navigator.mediaDevices.getUserMedia({
+                video: { facingMode: 'environment' }
+            });
+            
+            track = stream.getVideoTracks()[0];
+            video.srcObject = stream;
+            video.style.display = 'block';
+            
+            // Check if torch is supported
+            const capabilities = track.getCapabilities();
+            const hasTorch = capabilities.torch === true;
+            
+            // Update buttons
+            startBtn.disabled = true;
+            stopBtn.disabled = false;
+            torchBtn.disabled = !hasTorch;
+            
+            if (hasTorch) {
+                updateStatus('Camera started! Torch available 🔦', 'success');
+            } else {
+                updateStatus('Camera started, but torch not supported on this device');
+            }
+            
+        } catch (error) {
+            updateStatus('Failed to start camera: ' + error.message, 'error');
+        }
+    }
+
+    async function toggleTorch() {
+        if (!track) return;
+        
+        try {
+            torchOn = !torchOn;
+            
+            // Try to apply torch constraint
+            await track.applyConstraints({
+                advanced: [{ torch: torchOn }]
+            });
+            
+            // Update button
+            torchBtn.classList.toggle('active', torchOn);
+            torchBtn.textContent = torchOn ? '🔦 Torch ON' : '🔦 Torch OFF';
+            
+            updateStatus(`Torch turned ${torchOn ? 'ON' : 'OFF'}`, 'success');
+            
+        } catch (error) {
+            updateStatus('Torch control failed: ' + error.message, 'error');
+            torchOn = !torchOn; // Reset state
+        }
+    }
+
+    function stopCamera() {
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+            stream = null;
+            track = null;
+        }
+        
+        video.style.display = 'none';
+        startBtn.disabled = false;
+        stopBtn.disabled = true;
+        torchBtn.disabled = true;
+        torchBtn.classList.remove('active');
+        torchBtn.textContent = '🔦 Toggle Torch';
+        torchOn = false;
+        
+        updateStatus('Camera stopped');
+    }
+
+    // Event listeners
+    startBtn.addEventListener('click', startCamera);
+    torchBtn.addEventListener('click', toggleTorch);
+    stopBtn.addEventListener('click', stopCamera);
+
+    // Check browser support
+    if (!navigator.mediaDevices?.getUserMedia) {
+        updateStatus('Camera not supported in this browser', 'error');
+        startBtn.disabled = true;
+    }
+&lt;/script&gt;
+</code></pre>
+<p>Key points:</p>
+<ul>
+    <li>Uses <code>track.getCapabilities()</code> to check if torch/flashlight is supported</li>
+    <li>Controls torch with <code>track.applyConstraints({ advanced: [{ torch: torchOn }] })</code> .</li>
+</ul>
+<br />
+<br />
+<h4 id="requestAnAspectRatio">📸 Example 8: Requesting a Certain Aspect Ratio</h4>
+<p>Shows how to request a specific aspect ratio (16:9) and resolution (1280×720) from the camera using constraints like <code>aspectRatio: { ideal: 16/9 }</code> and displays the actual achieved dimensions.</p>
+<pre><code class="example">&lt;script&gt;
+    const videoElem = document.getElementById('preview');
+    const infoElem  = document.getElementById('info');
+
+    async function startCamera() {
+      try {
+        // Desired aspect ratio: 16:9
+        const desiredRatio = 16 / 9;
+
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            aspectRatio: { ideal: desiredRatio },
+            width: { ideal: 1280 },   
+            height: { ideal: 720 }
+          }
+        });
+
+        videoElem.srcObject = stream;
+
+        // Inspect actual settings
+        const track = stream.getVideoTracks()[0];
+        const settings = track.getSettings();
+        infoElem.textContent = 
+          `Got ${settings.width}×${settings.height} ` +
+          `(aspectRatio: ${settings.aspectRatio.toFixed(2)})`;
+      } catch (err) {
+        console.error('Error opening camera:', err);
+        infoElem.textContent = 'Unable to access camera with desired aspect ratio.';
+      }
+    }
+    startCamera();
+&lt;/script&gt;
+</code></pre>
+<p>Key points:</p>
+<ul>
+    <li>Specifies desired aspect ratio with <code>aspectRatio: { ideal: 16/9 }</code>;</li>
+    <li>Displays actual achieved resolution using <code>track.getSettings()</code>.</li>
+</ul>
+<br />
+<br />
+<h4 id="requestPortraitVideoStream">📱 Example 9: Requesting a Portrait Video Stream With facingMode:user</h4>
+<p>Demonstrates capturing video in portrait orientation (720×1280) using the front-facing camera by specifying <code>facingMode: "user"</code> and swapped width/height dimensions.</p>
+<pre><code class="example">&lt;script&gt;
+    navigator.mediaDevices.getUserMedia({
+        video: {
+        width: { ideal: 720 },
+        height: { ideal: 1280 }, 
+        facingMode: "user" 
+        },
+        audio: false
+    })
+    .then(stream => {
+        const video = document.getElementById('video');
+        video.srcObject = stream;
+    })
+    .catch(error => {
+        console.error('Error accessing camera:', error);
+    });
+&lt;/script&gt;
+</code></pre>
+<p>Key points:</p>
+<ul>
+    <li>Swaps dimensions (720×1280) to achieve portrait orientation;</li>
+    <li>Disables audio with <code>audio: false</code> for video-only capture.</li>
+</ul>
+<br />
+<br />
+<h4 id="basicVideoPreview"> 🎥 Example 10: Basic Video Preview (Promise-based)</h4>
+<p>A simple example showing how to display a live video preview from the camera using promise-based <code>getUserMedia</code> with basic error handling.</p>
+<pre><code class="example">&lt;video id="preview" autoplay playsinline width="640" height="480"&gt;&lt;/video&gt;
+&lt;script&gt;
+    const videoEl = document.getElementById('preview');
+
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+        // Attach the stream to the video element
+        videoEl.srcObject = stream;
+        })
+        .catch(err => {
+        console.error('Error accessing camera:', err);
+        });
+&lt;/script&gt;
+</code></pre>
+<p>What it does:</p>
+<ul>
+    <li>Requests camera access;</li>
+    <li>If granted, pipes the live video into the &lt;video&gt; element;</li>
+    <li>Handles errors (e.g. user denies permission).</li>
+</ul>
+<br />
+<br />
+<h4 id="asyncPlusAudioOnly">🎤 Example 11: Async/Await + Audio Only</h4>
+<p>Shows modern async/await syntax for accessing the microphone, with start/stop buttons to control audio capture</p>
+<pre><code class="example">&lt;button id="start"&gt;Start Mic&lt;/button&gt;
+&lt;button id="stop" disabled&gt;Stop Mic&lt;/button&gt;
+&lt;audio id="player" controls&gt;&lt;/audio&gt;
+
+&lt;script&gt;
+    const startBtn = document.getElementById('start');
+    const stopBtn  = document.getElementById('stop');
+    const player   = document.getElementById('player');
+    let mediaStream;
+
+    startBtn.addEventListener('click', async () => {
+    try {
+        mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        player.srcObject = mediaStream;
+        startBtn.disabled = true;
+        stopBtn.disabled = false;
+    } catch (err) {
+        console.error('Microphone access error:', err);
+    }
+    });
+
+    stopBtn.addEventListener('click', () => {
+    // Stop all audio tracks
+    mediaStream.getTracks().forEach(track => track.stop());
+    startBtn.disabled = false;
+    stopBtn.disabled = true;
+    });
+&lt;/script&gt;
+</code></pre>
+<p>Key points:</p>
+<ul>
+    <li>Uses <code>async/await</code> for cleaner control flow;</li>
+    <li>Demonstrates enabling/disabling controls and stopping tracks.</li>
+</ul>
+<br />
+<br />
+<h4 id="captureVideo">📸 Example 12: Capture Video + Take a Snapshot</h4>
+<p>Combines live video preview with snapshot functionality using HTML5 canvas. </p>
+<pre><code class="example">&lt;video id="cam" autoplay playsinline width="320" height="240">&lt;/video&gt;
+&lt;button id="snap">Take Snapshot&lt;/button&gt;
+&lt;canvas id="photo" width="320" height="240">&lt;/canvas&gt;
+
+&lt;script&gt;
+    const video = document.getElementById('cam');
+    const canvas = document.getElementById('photo');
+    const snapBtn = document.getElementById('snap');
+    const ctx = canvas.getContext('2d');
+
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
+    .then(stream => {
+        video.srcObject = stream;
+    })
+    .catch(console.error);
+
+    snapBtn.addEventListener('click', () => {
+    // Draw current video frame onto canvas
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    });
+&lt;/script&gt;
+</code></pre>
+<p>Highlights:</p>
+<ul>
+    <li><code>facingMode: "user"</code> requests the front-facing camera on devices that support it;</li>
+    <li>Snapshot uses &lt;canvas&gt;’s drawImage() to “freeze” the current video frame.</li>
+</ul>
+<br />
+<br />
+    <script>hljs.initHighlightingOnLoad();</script>
+</body>
+</html>
