@@ -173,7 +173,6 @@
     <a href="#videoOnlyConstraint">Example 4: Video Only Constraint</a><br />
     <a href="#listingSpecificDevice">Example 5: Listing Specific Devices</a><br />
     <a href="#recordingClip">Example 6: Recording a Clip (MediaRecorder)</a><br />
-    <a href="#torchControl">Example 7: Camera with Torch Control</a><br />
     <a href="#requestAnAspectRatio">Example 8: Requesting a Certain Aspect Ratio</a><br />
     <a href="#requestPortraitVideoStream">Example 9: Requesting a Portrait Video Stream With facingMode:user</a><br />
     <a href="#basicVideoPreview">Example 10: Basic Video Preview (Promise-based)</a><br />
@@ -336,129 +335,6 @@
     <li>Pipes it to a &lt;video&gt; for live preview;</li>
     <li>Uses <code>MediaRecorder</code> to capture chunks;</li>
     <li>When stopped, bundles into a <code>.webm</code> and offers a download link.</li>
-</ul>
-<br />
-<br />
-<h4 id="torchControl">📷 Example 7: Camera with Torch Control</h4>
-<p>Demonstrates accessing the back camera with <code>facingMode: 'environment'</code> and controlling the device's flashlight/torch feature.</p>
-<pre><code class="example">&lt;div class="controls"&gt;
-    &lt;button id="startBtn">Start Camera&lt;/button&gt;
-    &lt;button id="stopBtn" disabled>Stop Camera&lt;/button&gt;
-    &lt;button id="torchBtn" class="torch-btn" disabled>🔦 Toggle Torch&lt;/button&gt;
-&lt;/div&gt;
-
-&lt;video id="video" autoplay playsinline muted>&lt;/video&gt;
-
-&lt;div id="status" class="status info"&gt;
-    Ready to start camera. Make sure you're using Chrome on Android for torch functionality.
-&lt;/div&gt;
-
-&lt;script&gt;
-    let stream = null;
-    let track = null;
-    let torchOn = false;
-
-    const video = document.getElementById('video');
-    const startBtn = document.getElementById('startBtn');
-    const torchBtn = document.getElementById('torchBtn');
-    const stopBtn = document.getElementById('stopBtn');
-    const status = document.getElementById('status');
-
-    function updateStatus(message, type = '') {
-        status.textContent = message;
-        status.className = type;
-    }
-
-    async function startCamera() {
-        try {
-            updateStatus('Starting camera...');
-            
-            // Request camera with back camera
-            stream = await navigator.mediaDevices.getUserMedia({
-                video: { facingMode: 'environment' }
-            });
-            
-            track = stream.getVideoTracks()[0];
-            video.srcObject = stream;
-            video.style.display = 'block';
-            
-            // Check if torch is supported
-            const capabilities = track.getCapabilities();
-            const hasTorch = capabilities.torch === true;
-            
-            // Update buttons
-            startBtn.disabled = true;
-            stopBtn.disabled = false;
-            torchBtn.disabled = !hasTorch;
-            
-            if (hasTorch) {
-                updateStatus('Camera started! Torch available 🔦', 'success');
-            } else {
-                updateStatus('Camera started, but torch not supported on this device');
-            }
-            
-        } catch (error) {
-            updateStatus('Failed to start camera: ' + error.message, 'error');
-        }
-    }
-
-    async function toggleTorch() {
-        if (!track) return;
-        
-        try {
-            torchOn = !torchOn;
-            
-            // Try to apply torch constraint
-            await track.applyConstraints({
-                advanced: [{ torch: torchOn }]
-            });
-            
-            // Update button
-            torchBtn.classList.toggle('active', torchOn);
-            torchBtn.textContent = torchOn ? '🔦 Torch ON' : '🔦 Torch OFF';
-            
-            updateStatus(`Torch turned ${torchOn ? 'ON' : 'OFF'}`, 'success');
-            
-        } catch (error) {
-            updateStatus('Torch control failed: ' + error.message, 'error');
-            torchOn = !torchOn; // Reset state
-        }
-    }
-
-    function stopCamera() {
-        if (stream) {
-            stream.getTracks().forEach(track => track.stop());
-            stream = null;
-            track = null;
-        }
-        
-        video.style.display = 'none';
-        startBtn.disabled = false;
-        stopBtn.disabled = true;
-        torchBtn.disabled = true;
-        torchBtn.classList.remove('active');
-        torchBtn.textContent = '🔦 Toggle Torch';
-        torchOn = false;
-        
-        updateStatus('Camera stopped');
-    }
-
-    // Event listeners
-    startBtn.addEventListener('click', startCamera);
-    torchBtn.addEventListener('click', toggleTorch);
-    stopBtn.addEventListener('click', stopCamera);
-
-    // Check browser support
-    if (!navigator.mediaDevices?.getUserMedia) {
-        updateStatus('Camera not supported in this browser', 'error');
-        startBtn.disabled = true;
-    }
-&lt;/script&gt;
-</code></pre>
-<p>Key points:</p>
-<ul>
-    <li>Uses <code>track.getCapabilities()</code> to check if torch/flashlight is supported</li>
-    <li>Controls torch with <code>track.applyConstraints({ advanced: [{ torch: torchOn }] })</code> .</li>
 </ul>
 <br />
 <br />
