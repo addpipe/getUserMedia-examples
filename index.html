@@ -173,11 +173,11 @@
     <a href="#videoOnlyConstraint">Example 4: Video Only Constraint</a><br />
     <a href="#listingSpecificDevice">Example 5: Listing Specific Devices</a><br />
     <a href="#recordingClip">Example 6: Recording a Clip (MediaRecorder)</a><br />
+    <a href="#captureVideo">Example 7: Capture Video + Take a Snapshot</a><br />
     <a href="#requestAnAspectRatio">Example 8: Requesting a Certain Aspect Ratio</a><br />
     <a href="#requestPortraitVideoStream">Example 9: Requesting a Portrait Video Stream With facingMode:user</a><br />
     <a href="#basicVideoPreview">Example 10: Basic Video Preview (Promise-based)</a><br />
     <a href="#asyncPlusAudioOnly">Example 11: Async/Await + Audio Only</a><br />
-    <a href="#captureVideo">Example 12: Capture Video + Take a Snapshot</a><br />
     <br />
     <br />
 
@@ -338,6 +338,37 @@
 </ul>
 <br />
 <br />
+<h4 id="captureVideo">📸 Example 7: Capture Video + Take a Snapshot</h4>
+<p>Combines live video preview with snapshot functionality using HTML5 canvas. </p>
+<pre><code class="example">&lt;video id="cam" autoplay playsinline width="320" height="240">&lt;/video&gt;
+&lt;button id="snap">Take Snapshot&lt;/button&gt;
+&lt;canvas id="photo" width="320" height="240">&lt;/canvas&gt;
+
+&lt;script&gt;
+    const video = document.getElementById('cam');
+    const canvas = document.getElementById('photo');
+    const snapBtn = document.getElementById('snap');
+    const ctx = canvas.getContext('2d');
+
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
+    .then(stream => {
+        video.srcObject = stream;
+    })
+    .catch(console.error);
+
+    snapBtn.addEventListener('click', () => {
+    // Draw current video frame onto canvas
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    });
+&lt;/script&gt;
+</code></pre>
+<p>Highlights:</p>
+<ul>
+    <li><code>facingMode: "user"</code> requests the front-facing camera on devices that support it;</li>
+    <li>Snapshot uses &lt;canvas&gt;’s drawImage() to “freeze” the current video frame.</li>
+</ul>
+<br />
+<br />
 <h4 id="requestAnAspectRatio">📸 Example 8: Requesting a Certain Aspect Ratio</h4>
 <p>Shows how to request a specific aspect ratio (16:9) and resolution (1280×720) from the camera using constraints like <code>aspectRatio: { ideal: 16/9 }</code> and displays the actual achieved dimensions.</p>
 <pre><code class="example">&lt;script&gt;
@@ -466,37 +497,6 @@
 <ul>
     <li>Uses <code>async/await</code> for cleaner control flow;</li>
     <li>Demonstrates enabling/disabling controls and stopping tracks.</li>
-</ul>
-<br />
-<br />
-<h4 id="captureVideo">📸 Example 12: Capture Video + Take a Snapshot</h4>
-<p>Combines live video preview with snapshot functionality using HTML5 canvas. </p>
-<pre><code class="example">&lt;video id="cam" autoplay playsinline width="320" height="240">&lt;/video&gt;
-&lt;button id="snap">Take Snapshot&lt;/button&gt;
-&lt;canvas id="photo" width="320" height="240">&lt;/canvas&gt;
-
-&lt;script&gt;
-    const video = document.getElementById('cam');
-    const canvas = document.getElementById('photo');
-    const snapBtn = document.getElementById('snap');
-    const ctx = canvas.getContext('2d');
-
-    navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
-    .then(stream => {
-        video.srcObject = stream;
-    })
-    .catch(console.error);
-
-    snapBtn.addEventListener('click', () => {
-    // Draw current video frame onto canvas
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-    });
-&lt;/script&gt;
-</code></pre>
-<p>Highlights:</p>
-<ul>
-    <li><code>facingMode: "user"</code> requests the front-facing camera on devices that support it;</li>
-    <li>Snapshot uses &lt;canvas&gt;’s drawImage() to “freeze” the current video frame.</li>
 </ul>
 <br />
 <br />
