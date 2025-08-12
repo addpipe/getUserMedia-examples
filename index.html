@@ -251,7 +251,7 @@
 <br />
 <br />
 <h4 id="listingSpecificDevice">🔍 Example 5: List Available Devices</h4>
-<p>Uses <code>navigator.mediaDevices.enumerateDevices()</code> to list all available media input devices (cameras and microphones) on the user's system.</p>
+<p>Uses <code>navigator.mediaDevices.enumerateDevices()</code> to list all available media input devices (cameras and microphones) on the user's system and get their device ID.</p>
 <pre><code class="example">&lt;script&gt;
     navigator.mediaDevices.enumerateDevices().then(devices => {
         devices.forEach(device => {
@@ -405,7 +405,7 @@
 <br />
 <br />
 <h4 id="requestPortraitVideoStream">📱 Example 9: Requesting a Portrait Video Stream With facingMode:user</h4>
-<p>Demonstrates capturing video in portrait orientation (720×1280) using the front-facing camera by specifying <code>facingMode: "user"</code> and swapped width/height dimensions.</p>
+<p>Demonstrates capturing video in portrait orientation using the front-facing camera by specifying <code>facingMode: "user"</code> and swapped width/height dimensions (720x1280).</p>
 <pre><code class="example">&lt;script&gt;
     navigator.mediaDevices.getUserMedia({
         video: {
