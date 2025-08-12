@@ -162,12 +162,12 @@
     <p>The examples below showcase how <code>getUserMedia</code> enables a range of key scenarios, making it a vital tool for modern web applications.</p>
     
     <h2>table of contents </h2>
-    <a href="#videoAndAudio">Example 1: Video and Audio</a><br />
-    <a href="#stoppingTheStream">Example 2: Stopping the Stream</a><br />
+    <a href="#videoAndAudio">Example 1: Capture Audio and Video</a><br />
+    <a href="#stoppingTheStream">Example 2: Stop Device Access</a><br />
     <a href="#audioOnlyConstraint">Example 3: Audio Only Constraint</a><br />
     <a href="#videoOnlyConstraint">Example 4: Video Only Constraint</a><br />
-    <a href="#listingSpecificDevice">Example 5: Listing Specific Devices</a><br />
-    <a href="#recordingClip">Example 6: Recording a Clip (MediaRecorder)</a><br />
+    <a href="#listingSpecificDevice">Example 5: List Available Devices</a><br />
+    <a href="#recordingClip">Example 6: Recording a Video Clip (MediaRecorder)</a><br />
     <a href="#captureVideo">Example 7: Capture Video + Take a Snapshot</a><br />
     <a href="#requestAnAspectRatio">Example 8: Requesting a Certain Aspect Ratio</a><br />
     <a href="#requestPortraitVideoStream">Example 9: Requesting a Portrait Video Stream With facingMode:user</a><br />
@@ -176,8 +176,8 @@
     <br />
     <br />
 
-<h4 id="videoAndAudio">🎥🎤 Example 1: Video and Audio</h4>
 <p>This example demonstrates the basic use of the <code>getUserMedia</code> method to access both the user's camera and microphone simultaneously. The code requests permission for both video and audio streams using <code>{ video: true, audio: true }</code>, then creates a video element that displays the live camera feed with audio in real-time. </p>
+<h4 id="videoAndAudio">🎥🎤 Example 1: Capture Audio and Video</h4>
 <pre><code class="example">&lt;video id="video" autoplay playsinline&gt; &lt;/video&gt;
 &lt;script&gt;
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
@@ -199,7 +199,7 @@
 </ul>
 <br />
 <br />
-<h4 id="stoppingTheStream">🛑 Example 2: Stopping the Stream</h4>
+<h4 id="stoppingTheStream">🛑 Example 2: Stop Device Access</h4>
 <p>Demonstrates how to properly stop media streams by calling <code>getTracks().forEach(track => track.stop())</code> on the stream object. This is essential for releasing camera and microphone resources when they're no longer needed.</p>
 <pre><code class="example">&lt;script&gt;
     stream.getTracks().forEach(track => track.stop());
@@ -250,7 +250,7 @@
 </ul>
 <br />
 <br />
-<h4 id="listingSpecificDevice">🔍 Example 5: Listing Specific Devices</h4>
+<h4 id="listingSpecificDevice">🔍 Example 5: List Available Devices</h4>
 <p>Uses <code>navigator.mediaDevices.enumerateDevices()</code> to list all available media input devices (cameras and microphones) on the user's system.</p>
 <pre><code class="example">&lt;script&gt;
     navigator.mediaDevices.enumerateDevices().then(devices => {
@@ -267,8 +267,8 @@
 </ul>
 <br />
 <br />
-<h4 id="recordingClip">📸 Example 6: Recording a Clip (MediaRecorder)</h4>
 <p>Shows how to record video and audio using the <code>MediaRecorder API</code>.</p>
+<h4 id="recordingClip">📸 Example 6: Recording a Video Clip (MediaRecorder)</h4>
 <pre><code class="example">&lt;video id="preview" autoplay playsinline width="320" height="240"&gt;&lt;/video&gt;
     &lt;button id="record">Start Recording&lt;/button&gt;
     &lt;button id="stop" disabled>Stop & Download&lt;/button&gt;
