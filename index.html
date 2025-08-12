@@ -188,19 +188,29 @@
 
 <h4 id="videoAndAudio">🎥🎤 Example 1: Capture Audio and Video</h4>
 <p>This example demonstrates the basic use of the <code>getUserMedia</code> method to access both the user's camera and microphone simultaneously. The code requests permission for both video and audio streams using the <code>{ video: true, audio: true }</code> constraint, then creates a video element that displays the camera stream in real-time. </p>
-<pre><code class="example">&lt;video id="video" autoplay playsinline&gt; &lt;/video&gt;
-&lt;script&gt;
-    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-    .then(stream => {
-        const video = document.createElement('video');
-        video.autoplay = true;
-        video.srcObject = stream;
-        document.body.appendChild(video);
-    })
-    .catch(error => {
-        console.error('Error accessing camera and microphone:', error);
-    });
-&lt;/script&gt;</code></pre>
+<pre><code class="example">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;title&gt;Capture Audio and Video&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;video id="video" autoplay playsinline&gt; &lt;/video&gt;
+    &lt;script&gt;
+        navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        .then(stream => {
+            const video = document.createElement('video');
+            video.autoplay = true;
+            video.srcObject = stream;
+            document.body.appendChild(video);
+        })
+        .catch(error => {
+            console.error('Error accessing camera and microphone:', error);
+        });
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
 <p>Key points:</p>
 <ul>
     <li>Uses <code>{ video: true, audio: true }</code> to request both camera and microphone access;</li>
