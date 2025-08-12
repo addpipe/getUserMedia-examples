@@ -176,8 +176,8 @@
     <br />
     <br />
 
-<p>This example demonstrates the basic use of the <code>getUserMedia</code> method to access both the user's camera and microphone simultaneously. The code requests permission for both video and audio streams using <code>{ video: true, audio: true }</code>, then creates a video element that displays the live camera feed with audio in real-time. </p>
 <h4 id="videoAndAudio">🎥🎤 Example 1: Capture Audio and Video</h4>
+<p>This example demonstrates the basic use of the <code>getUserMedia</code> method to access both the user's camera and microphone simultaneously. The code requests permission for both video and audio streams using the <code>{ video: true, audio: true }</code> constraint, then creates a video element that displays the camera stream in real-time. </p>
 <pre><code class="example">&lt;video id="video" autoplay playsinline&gt; &lt;/video&gt;
 &lt;script&gt;
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
@@ -194,7 +194,7 @@
 <p>Key points:</p>
 <ul>
     <li>Uses <code>{ video: true, audio: true }</code> to request both camera and microphone access;</li>
-    <li>Creates a video element with autoplay to display the live stream immediately;</li>
+    <li>Creates a video element with autoplay to display the stream from the camera;</li>
     <li>Includes basic error handling with <code>.catch()</code> for permission denials or device issues.</li>
 </ul>
 <br />
@@ -208,7 +208,7 @@
 <p>Key points:</p>
 <ul>
     <li>Essential for preventing memory leaks and freeing up camera/microphone for other applications;</li>
-    <li>Should always be called when media access is no longer needed.</li>
+    <li>Should always be called when device access is no longer needed.</li>
 </ul>
 <br />
 <br />
@@ -246,7 +246,7 @@
 </code></pre>
 <p>Key points:</p>
 <ul>
-    <li>Suitable for applications that need visual capture without sound.</li>
+    <li>Suitable for applications that need only camera access like taking photos or scanning QR codes.</li>
 </ul>
 <br />
 <br />
@@ -263,12 +263,12 @@
 <p>Key points:</p>
 <ul>
     <li>Logs device kind, label, and deviceId for each camera and microphone;</li>
-    <li>Helpful for giving users device selection options in media applications.</li>
+    <li>Helpful for giving users acess to a custom made device selection UI.</li>
 </ul>
 <br />
 <br />
-<p>Shows how to record video and audio using the <code>MediaRecorder API</code>.</p>
 <h4 id="recordingClip">📸 Example 6: Recording a Video Clip (MediaRecorder)</h4>
+<p>Shows how to record video and audio using the <code>MediaRecorder</code> interface of the <code>MediaStream Recording API</code>.</p>
 <pre><code class="example">&lt;video id="preview" autoplay playsinline width="320" height="240"&gt;&lt;/video&gt;
     &lt;button id="record">Start Recording&lt;/button&gt;
     &lt;button id="stop" disabled>Stop & Download&lt;/button&gt;
@@ -365,7 +365,7 @@
 <br />
 <br />
 <h4 id="requestAnAspectRatio">📸 Example 8: Requesting a Certain Aspect Ratio</h4>
-<p>Shows how to request a specific aspect ratio (16:9) from the camera using constraints like <code>aspectRatio: { ideal: 16/9 }</code> and displays the actual achieved dimensions.</p>
+<p>Shows how to request a specific aspect ratio (16:9) from the camera using the <code>aspectRatio</code> constraint and displays the actual achieved dimensions.</p>
 <pre><code class="example">&lt;script&gt;
     const videoElem = document.getElementById('preview');
     const infoElem  = document.getElementById('info');
