@@ -364,16 +364,16 @@
 </ul>
 <br />
 <br />
-<h4 id="requestAnAspectRatio">📸 Example 8: Requesting a Certain Aspect Ratio</h4>
-<p>Shows how to request a specific aspect ratio (16:9) from the camera using the <code>aspectRatio</code> constraint and displays the actual achieved dimensions.</p>
+<h4 id="requestAnAspectRatio">📸 Example 8: Requesting a Certain Aspect Ratio (Square)</h4>
+<p>Shows how to request a specific aspect ratio (1:1) from the camera using the <code>aspectRatio</code> constraint and displays the actual achieved dimensions.</p>
 <pre><code class="example">&lt;script&gt;
     const videoElem = document.getElementById('preview');
     const infoElem  = document.getElementById('info');
 
     async function startCamera() {
       try {
-        // Desired aspect ratio: 16:9
-        const desiredRatio = 16 / 9;
+        // Desired aspect ratio: 1:1 (square)
+        const desiredRatio = 1 / 1;
 
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
