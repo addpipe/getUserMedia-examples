@@ -417,6 +417,39 @@
 </ul>
 <br />
 <br />
-    <script>hljs.initHighlightingOnLoad();</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('pre > code').forEach(codeBlock => {
+            if (!navigator.clipboard) return; 
+        
+            // Create wrapper div
+            const wrapper = document.createElement('div');
+            wrapper.className = 'code-block-wrapper';
+            codeBlock.parentNode.parentNode.insertBefore(wrapper, codeBlock.parentNode);
+            wrapper.appendChild(codeBlock.parentNode);
+        
+            // Create button
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.innerText = 'Copy'; 
+            btn.className = 'copy-code-button';
+        
+            btn.addEventListener('click', async () => {
+                try {
+                    await navigator.clipboard.writeText(codeBlock.innerText);
+                    btn.innerText = 'Copied';
+                    setTimeout(() => (btn.innerText = 'Copy'), 2000);
+                } catch (err) {
+                    btn.innerText = 'Copy failed';
+                    console.error('Copy failed', err);
+                    setTimeout(() => (btn.innerText = 'Copy failed'), 2000);
+                }
+            });
+        
+            wrapper.appendChild(btn);
+        });
+    });
+</script>
+<script>hljs.initHighlightingOnLoad();</script>
 </body>
 </html>
